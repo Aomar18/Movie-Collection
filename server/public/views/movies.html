@@ -1,5 +1,19 @@
 <div ng-controller="MovieController as vm">
-
-
     <h1>Add a movie!</h1>
+
+    <div layout-gt-xs="row">
+        <form ng-submit="addMovie()">
+            <input type="text" placeholder="Name" ng-model="vm.name">
+            <select id="genre">
+                <option value=""></option>
+            </select>
+            <md-content layout-padding ng-cloak>
+                <h4>Date Aired</h4>
+                <md-datepicker ng-model="vm.myDate" md-placeholder="8/23/2018"></md-datepicker>
+            </md-content>
+
+            <input type="number" placeholder="Runtime" ng-model="vm.runtime">
+            <button ng-model-options="">Submit</button>
+        </form>
+    </div>
 </div>

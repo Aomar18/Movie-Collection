@@ -2,7 +2,8 @@
 console.log('JS');
 
 
-let myApp = angular.module('myApp', ['ngRoute']);
+
+let myApp = angular.module('myApp', ['ngRoute', 'ngMaterial','ngMessages']);
 console.log('in controller');
 
 

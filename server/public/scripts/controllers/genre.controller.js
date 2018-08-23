@@ -20,6 +20,7 @@ myApp.controller('GenreController', function ($http) {
         });
     }
 
+
     function getData() {
         console.log('Getting Data is in progress');
         $http({

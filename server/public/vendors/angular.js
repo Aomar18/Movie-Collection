@@ -4203,7 +4203,7 @@ var $$MapProvider = [/** @this */function() {
  * it into the current AngularJS scope.
  *
  * ```js
- * var $div = $('<div ng-controller="MyCtrl">{{content.label}}</div>');
+ * var $div = $('<div ng-controller="Myvm">{{content.label}}</div>');
  * $(document.body).append($div);
  *
  * angular.element(document).injector().invoke(function($compile) {
@@ -4706,7 +4706,7 @@ function annotate(fn, strictDi, name) {
  * ```
  * You would then inject and use this service like this:
  * ```js
- *   someModule.controller('Ctrl', ['ping', function(ping) {
+ *   someModule.controller('vm', ['ping', function(ping) {
  *     ping();
  *   }]);
  * ```
@@ -4760,7 +4760,7 @@ function annotate(fn, strictDi, name) {
  * ```
  * You would then inject and use this service like this:
  * ```js
- *   someModule.controller('Ctrl', ['ping', function(ping) {
+ *   someModule.controller('vm', ['ping', function(ping) {
  *     ping.send();
  *   }]);
  * ```
@@ -5252,7 +5252,7 @@ function $AnchorScrollProvider() {
    * @example
      <example module="anchorScrollOffsetExample" name="anchor-scroll-offset">
        <file name="index.html">
-         <div class="fixed-header" ng-controller="headerCtrl">
+         <div class="fixed-header" ng-controller="headervm">
            <a href="" ng-click="gotoAnchor(x)" ng-repeat="x in [1,2,3,4,5]">
              Go to anchor {{x}}
            </a>
@@ -5266,7 +5266,7 @@ function $AnchorScrollProvider() {
            .run(['$anchorScroll', function($anchorScroll) {
              $anchorScroll.yOffset = 50;   // always scroll by 50 extra pixels
            }])
-           .controller('headerCtrl', ['$anchorScroll', '$location', '$scope',
+           .controller('headervm', ['$anchorScroll', '$location', '$scope',
              function($anchorScroll, $location, $scope) {
                $scope.gotoAnchor = function(x) {
                  var newHash = 'anchor' + x;
@@ -7318,9 +7318,9 @@ function $TemplateCacheProvider() {
  *     angular.module('do-check-module', [])
  *       .component('app', {
  *         template:
- *           'Month: <input ng-model="$ctrl.month" ng-change="$ctrl.updateDate()">' +
- *           'Date: {{ $ctrl.date }}' +
- *           '<test date="$ctrl.date"></test>',
+ *           'Month: <input ng-model="$vm.month" ng-change="$vm.updateDate()">' +
+ *           'Date: {{ $vm.date }}' +
+ *           '<test date="$vm.date"></test>',
  *         controller: function() {
  *           this.date = new Date();
  *           this.month = this.date.getMonth();
@@ -7332,7 +7332,7 @@ function $TemplateCacheProvider() {
  *       .component('test', {
  *         bindings: { date: '<' },
  *         template:
- *           '<pre>{{ $ctrl.log | json }}</pre>',
+ *           '<pre>{{ $vm.log | json }}</pre>',
  *         controller: function() {
  *           var previousValue;
  *           this.log = [];
@@ -7369,7 +7369,7 @@ function $TemplateCacheProvider() {
  *        .component('test', {
  *          bindings: { items: '<' },
  *          template:
- *            '<pre>{{ $ctrl.log | json }}</pre>',
+ *            '<pre>{{ $vm.log | json }}</pre>',
  *          controller: function() {
  *            this.log = [];
  *
@@ -7947,7 +7947,7 @@ function $TemplateCacheProvider() {
  *   hasn't been evaluated yet and so the value is at this time set to `undefined`.
  *
  * ```js
- * function linkingFn(scope, elm, attrs, ctrl) {
+ * function linkingFn(scope, elm, attrs, vm) {
  *   // get the attribute value
  *   console.log(attrs.ngModel);
  *
@@ -8192,7 +8192,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
     }
     if (bindings.bindToController && !directive.controller) {
       // There is no controller
-      throw $compileMinErr('noctrl',
+      throw $compileMinErr('novm',
             'Cannot bind to controller without directive \'{0}\'s controller.',
             directiveName);
     }
@@ -8306,7 +8306,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    *      registered controller} if passed as a string. An empty `noop` function by default.
    *    - `controllerAs` – `{string=}` – identifier name for to reference the controller in the component's scope.
    *      If present, the controller will be published to scope under the `controllerAs` name.
-   *      If not present, this will default to be `$ctrl`.
+   *      If not present, this will default to be `$vm`.
    *    - `template` – `{string=|function()=}` – html template as a string or a function that
    *      returns an html template as a string which should be used as the contents of this component.
    *      Empty string by default.
@@ -8354,21 +8354,21 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    * ```js
    *   var myMod = angular.module(...);
    *   myMod.component('myComp', {
-   *     template: '<div>My name is {{$ctrl.name}}</div>',
+   *     template: '<div>My name is {{$vm.name}}</div>',
    *     controller: function() {
    *       this.name = 'shahar';
    *     }
    *   });
    *
    *   myMod.component('myComp', {
-   *     template: '<div>My name is {{$ctrl.name}}</div>',
+   *     template: '<div>My name is {{$vm.name}}</div>',
    *     bindings: {name: '@'}
    *   });
    *
    *   myMod.component('myComp', {
    *     templateUrl: 'views/my-comp.html',
-   *     controller: 'MyCtrl',
-   *     controllerAs: 'ctrl',
+   *     controller: 'Myvm',
+   *     controllerAs: 'vm',
    *     bindings: {name: '@'}
    *   });
    *
@@ -8400,7 +8400,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       var template = (!options.template && !options.templateUrl ? '' : options.template);
       var ddo = {
         controller: controller,
-        controllerAs: identifierForController(options.controller) || options.controllerAs || '$ctrl',
+        controllerAs: identifierForController(options.controller) || options.controllerAs || '$vm',
         template: makeInjectable(template),
         templateUrl: makeInjectable(options.templateUrl),
         transclude: options.transclude,
@@ -11034,7 +11034,7 @@ function $ControllerProvider() {
       if (isString(expression)) {
         match = expression.match(CNTRL_REG);
         if (!match) {
-          throw $controllerMinErr('ctrlfmt',
+          throw $controllerMinErr('vmfmt',
             'Badly formed controller string \'{0}\'. ' +
             'Must match `__name__ as __id__` or `__name__`.', expression);
         }
@@ -11046,7 +11046,7 @@ function $ControllerProvider() {
                 (globals ? getter($window, constructor, true) : undefined);
 
         if (!expression) {
-          throw $controllerMinErr('ctrlreg',
+          throw $controllerMinErr('vmreg',
             'The controller with the name \'{0}\' is not registered.', constructor);
         }
 
@@ -14494,7 +14494,7 @@ function $LocationProvider() {
       // TODO(vojta): rewrite link when opening in new tab/window (in legacy browser)
       // currently we open nice url link and redirect then
 
-      if (!rewriteLinks || event.ctrlKey || event.metaKey || event.shiftKey || event.which === 2 || event.button === 2) return;
+      if (!rewriteLinks || event.vmKey || event.metaKey || event.shiftKey || event.which === 2 || event.button === 2) return;
 
       var elm = jqLite(event.target);
 
@@ -19699,14 +19699,14 @@ function $SceDelegateProvider() {
  *
  * <example module="mySceApp" deps="angular-sanitize.js" name="sce-service">
  * <file name="index.html">
- *   <div ng-controller="AppController as myCtrl">
- *     <i ng-bind-html="myCtrl.explicitlyTrustedHtml" id="explicitlyTrustedHtml"></i><br><br>
+ *   <div ng-controller="AppController as myvm">
+ *     <i ng-bind-html="myvm.explicitlyTrustedHtml" id="explicitlyTrustedHtml"></i><br><br>
  *     <b>User comments</b><br>
  *     By default, HTML that isn't explicitly trusted (e.g. Alice's comment) is sanitized when
  *     $sanitize is available.  If $sanitize isn't available, this results in an error instead of an
  *     exploit.
  *     <div class="well">
- *       <div ng-repeat="userComment in myCtrl.userComments">
+ *       <div ng-repeat="userComment in myvm.userComments">
  *         <b>{{userComment.name}}</b>:
  *         <span ng-bind-html="userComment.htmlComment" class="htmlComment"></span>
  *         <br>
@@ -20905,7 +20905,7 @@ function $$CookieReaderProvider() {
  * @example
    <example name="$filter" module="filterExample">
      <file name="index.html">
-       <div ng-controller="MainCtrl">
+       <div ng-controller="Mainvm">
         <h3>{{ originalText }}</h3>
         <h3>{{ filteredText }}</h3>
        </div>
@@ -20913,7 +20913,7 @@ function $$CookieReaderProvider() {
 
      <file name="script.js">
       angular.module('filterExample', [])
-      .controller('MainCtrl', function($scope, $filter) {
+      .controller('Mainvm', function($scope, $filter) {
         $scope.originalText = 'hello';
         $scope.filteredText = $filter('uppercase')($scope.originalText);
       });
@@ -23303,9 +23303,9 @@ forEach(['src', 'srcset', 'href'], function(attrName) {
   };
 });
 
-/* global -nullFormCtrl, -PENDING_CLASS, -SUBMITTED_CLASS
+/* global -nullFormvm, -PENDING_CLASS, -SUBMITTED_CLASS
  */
-var nullFormCtrl = {
+var nullFormvm = {
   $addControl: noop,
   $$renameControl: nullFormRenameControl,
   $removeControl: noop,
@@ -23384,7 +23384,7 @@ function FormController($element, $attrs, $scope, $animate, $interpolate) {
   this.$valid = true;
   this.$invalid = false;
   this.$submitted = false;
-  this.$$parentForm = nullFormCtrl;
+  this.$$parentForm = nullFormvm;
 
   this.$$element = $element;
   this.$$animate = $animate;
@@ -23506,7 +23506,7 @@ FormController.prototype = {
     }, this);
 
     arrayRemove(this.$$controls, control);
-    control.$$parentForm = nullFormCtrl;
+    control.$$parentForm = nullFormvm;
   },
 
   /**
@@ -23800,7 +23800,7 @@ var formDirectiveFactory = function(isNgForm) {
     var formDirective = {
       name: 'form',
       restrict: isNgForm ? 'EAC' : 'E',
-      require: ['form', '^^?form'], //first is the form's own ctrl, second is an optional parent form
+      require: ['form', '^^?form'], //first is the form's own vm, second is an optional parent form
       controller: FormController,
       compile: function ngFormCompile(formElement, attr) {
         // Setup initial state of the control
@@ -23809,8 +23809,8 @@ var formDirectiveFactory = function(isNgForm) {
         var nameAttr = attr.name ? 'name' : (isNgForm && attr.ngForm ? 'ngForm' : false);
 
         return {
-          pre: function ngFormPreLink(scope, formElement, attr, ctrls) {
-            var controller = ctrls[0];
+          pre: function ngFormPreLink(scope, formElement, attr, vms) {
+            var controller = vms[0];
 
             // if `action` attr is not present on the form, prevent the default action (submission)
             if (!('action' in attr)) {
@@ -23840,8 +23840,8 @@ var formDirectiveFactory = function(isNgForm) {
               });
             }
 
-            var parentFormCtrl = ctrls[1] || controller.$$parentForm;
-            parentFormCtrl.$addControl(controller);
+            var parentFormvm = vms[1] || controller.$$parentForm;
+            parentFormvm.$addControl(controller);
 
             var setter = nameAttr ? getSetter(controller.$name) : noop;
 
@@ -23858,7 +23858,7 @@ var formDirectiveFactory = function(isNgForm) {
             formElement.on('$destroy', function() {
               controller.$$parentForm.$removeControl(controller);
               setter(scope, undefined);
-              extend(controller, nullFormCtrl); //stop propagating child destruction handlers upwards
+              extend(controller, nullFormvm); //stop propagating child destruction handlers upwards
             });
           }
         };
@@ -23940,37 +23940,37 @@ function addSetValidityMethod(context) {
     this.$$parentForm.$setValidity(validationErrorKey, combinedState, this);
   };
 
-  function createAndSet(ctrl, name, value, controller) {
-    if (!ctrl[name]) {
-      ctrl[name] = {};
+  function createAndSet(vm, name, value, controller) {
+    if (!vm[name]) {
+      vm[name] = {};
     }
-    set(ctrl[name], value, controller);
+    set(vm[name], value, controller);
   }
 
-  function unsetAndCleanup(ctrl, name, value, controller) {
-    if (ctrl[name]) {
-      unset(ctrl[name], value, controller);
+  function unsetAndCleanup(vm, name, value, controller) {
+    if (vm[name]) {
+      unset(vm[name], value, controller);
     }
-    if (isObjectEmpty(ctrl[name])) {
-      ctrl[name] = undefined;
-    }
-  }
-
-  function cachedToggleClass(ctrl, className, switchValue) {
-    if (switchValue && !ctrl.$$classCache[className]) {
-      ctrl.$$animate.addClass(ctrl.$$element, className);
-      ctrl.$$classCache[className] = true;
-    } else if (!switchValue && ctrl.$$classCache[className]) {
-      ctrl.$$animate.removeClass(ctrl.$$element, className);
-      ctrl.$$classCache[className] = false;
+    if (isObjectEmpty(vm[name])) {
+      vm[name] = undefined;
     }
   }
 
-  function toggleValidationCss(ctrl, validationErrorKey, isValid) {
+  function cachedToggleClass(vm, className, switchValue) {
+    if (switchValue && !vm.$$classCache[className]) {
+      vm.$$animate.addClass(vm.$$element, className);
+      vm.$$classCache[className] = true;
+    } else if (!switchValue && vm.$$classCache[className]) {
+      vm.$$animate.removeClass(vm.$$element, className);
+      vm.$$classCache[className] = false;
+    }
+  }
+
+  function toggleValidationCss(vm, validationErrorKey, isValid) {
     validationErrorKey = validationErrorKey ? '-' + snake_case(validationErrorKey, '-') : '';
 
-    cachedToggleClass(ctrl, VALID_CLASS + validationErrorKey, isValid === true);
-    cachedToggleClass(ctrl, INVALID_CLASS + validationErrorKey, isValid === false);
+    cachedToggleClass(vm, VALID_CLASS + validationErrorKey, isValid === true);
+    cachedToggleClass(vm, INVALID_CLASS + validationErrorKey, isValid === false);
   }
 }
 
@@ -24170,7 +24170,7 @@ var inputType = {
               };
             }]);
        </script>
-       <form name="myForm" ng-controller="DateController as dateCtrl">
+       <form name="myForm" ng-controller="DateController as datevm">
           <label for="exampleInput">Pick a date in 2013:</label>
           <input type="date" id="exampleInput" name="input" ng-model="example.value"
               placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
@@ -24272,7 +24272,7 @@ var inputType = {
             };
           }]);
       </script>
-      <form name="myForm" ng-controller="DateController as dateCtrl">
+      <form name="myForm" ng-controller="DateController as datevm">
         <label for="exampleInput">Pick a date between in 2013:</label>
         <input type="datetime-local" id="exampleInput" name="input" ng-model="example.value"
             placeholder="yyyy-MM-ddTHH:mm:ss" min="2001-01-01T00:00:00" max="2013-12-31T00:00:00" required />
@@ -24375,7 +24375,7 @@ var inputType = {
           };
         }]);
      </script>
-     <form name="myForm" ng-controller="DateController as dateCtrl">
+     <form name="myForm" ng-controller="DateController as datevm">
         <label for="exampleInput">Pick a time between 8am and 5pm:</label>
         <input type="time" id="exampleInput" name="input" ng-model="example.value"
             placeholder="HH:mm:ss" min="08:00:00" max="17:00:00" required />
@@ -24477,7 +24477,7 @@ var inputType = {
           };
         }]);
       </script>
-      <form name="myForm" ng-controller="DateController as dateCtrl">
+      <form name="myForm" ng-controller="DateController as datevm">
         <label>Pick a date between in 2013:
           <input id="exampleInput" type="week" name="input" ng-model="example.value"
                  placeholder="YYYY-W##" min="2012-W32"
@@ -24582,7 +24582,7 @@ var inputType = {
           };
         }]);
      </script>
-     <form name="myForm" ng-controller="DateController as dateCtrl">
+     <form name="myForm" ng-controller="DateController as datevm">
        <label for="exampleInput">Pick a month in 2013:</label>
        <input id="exampleInput" type="month" name="input" ng-model="example.value"
           placeholder="yyyy-MM" min="2013-01" max="2013-12" required />
@@ -25205,18 +25205,18 @@ var inputType = {
   'file': noop
 };
 
-function stringBasedInputType(ctrl) {
-  ctrl.$formatters.push(function(value) {
-    return ctrl.$isEmpty(value) ? value : value.toString();
+function stringBasedInputType(vm) {
+  vm.$formatters.push(function(value) {
+    return vm.$isEmpty(value) ? value : value.toString();
   });
 }
 
-function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-  baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
-  stringBasedInputType(ctrl);
+function textInputType(scope, element, attr, vm, $sniffer, $browser) {
+  baseInputType(scope, element, attr, vm, $sniffer, $browser);
+  stringBasedInputType(vm);
 }
 
-function baseInputType(scope, element, attr, ctrl, $sniffer, $browser) {
+function baseInputType(scope, element, attr, vm, $sniffer, $browser) {
   var type = lowercase(element[0].type);
 
   // In composition mode, users are still inputting intermediate text buffer,
@@ -25256,8 +25256,8 @@ function baseInputType(scope, element, attr, ctrl, $sniffer, $browser) {
     // If a control is suffering from bad input (due to native validators), browsers discard its
     // value, so it may be necessary to revalidate (by calling $setViewValue again) even if the
     // control's value is the same empty value twice in a row.
-    if (ctrl.$viewValue !== value || (value === '' && ctrl.$$hasNativeValidators)) {
-      ctrl.$setViewValue(value, event);
+    if (vm.$viewValue !== value || (value === '' && vm.$$hasNativeValidators)) {
+      vm.$setViewValue(value, event);
     }
   };
 
@@ -25301,7 +25301,7 @@ function baseInputType(scope, element, attr, ctrl, $sniffer, $browser) {
   // firing any input/change events.
   // For these event types, when native validators are present and the browser supports the type,
   // check for validity changes on various DOM events.
-  if (PARTIAL_VALIDATION_TYPES[type] && ctrl.$$hasNativeValidators && type === attr.type) {
+  if (PARTIAL_VALIDATION_TYPES[type] && vm.$$hasNativeValidators && type === attr.type) {
     element.on(PARTIAL_VALIDATION_EVENTS, /** @this */ function(ev) {
       if (!timeout) {
         var validity = this[VALIDITY_STATE_PROPERTY];
@@ -25317,9 +25317,9 @@ function baseInputType(scope, element, attr, ctrl, $sniffer, $browser) {
     });
   }
 
-  ctrl.$render = function() {
+  vm.$render = function() {
     // Workaround for Firefox validation #12102.
-    var value = ctrl.$isEmpty(ctrl.$viewValue) ? '' : ctrl.$viewValue;
+    var value = vm.$isEmpty(vm.$viewValue) ? '' : vm.$viewValue;
     if (element.val() !== value) {
       element.val(value);
     }
@@ -25409,17 +25409,17 @@ function createDateParser(regexp, mapping) {
 }
 
 function createDateInputType(type, regexp, parseDate, format) {
-  return function dynamicDateInputType(scope, element, attr, ctrl, $sniffer, $browser, $filter) {
-    badInputChecker(scope, element, attr, ctrl);
-    baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
-    var timezone = ctrl && ctrl.$options.getOption('timezone');
+  return function dynamicDateInputType(scope, element, attr, vm, $sniffer, $browser, $filter) {
+    badInputChecker(scope, element, attr, vm);
+    baseInputType(scope, element, attr, vm, $sniffer, $browser);
+    var timezone = vm && vm.$options.getOption('timezone');
     var previousDate;
 
-    ctrl.$$parserName = type;
-    ctrl.$parsers.push(function(value) {
-      if (ctrl.$isEmpty(value)) return null;
+    vm.$$parserName = type;
+    vm.$parsers.push(function(value) {
+      if (vm.$isEmpty(value)) return null;
       if (regexp.test(value)) {
-        // Note: We cannot read ctrl.$modelValue, as there might be a different
+        // Note: We cannot read vm.$modelValue, as there might be a different
         // parser/formatter in the processing chain so that the model
         // contains some different data format!
         var parsedDate = parseDate(value, previousDate);
@@ -25431,7 +25431,7 @@ function createDateInputType(type, regexp, parseDate, format) {
       return undefined;
     });
 
-    ctrl.$formatters.push(function(value) {
+    vm.$formatters.push(function(value) {
       if (value && !isDate(value)) {
         throw ngModelMinErr('datefmt', 'Expected `{0}` to be a date', value);
       }
@@ -25449,23 +25449,23 @@ function createDateInputType(type, regexp, parseDate, format) {
 
     if (isDefined(attr.min) || attr.ngMin) {
       var minVal;
-      ctrl.$validators.min = function(value) {
+      vm.$validators.min = function(value) {
         return !isValidDate(value) || isUndefined(minVal) || parseDate(value) >= minVal;
       };
       attr.$observe('min', function(val) {
         minVal = parseObservedDateValue(val);
-        ctrl.$validate();
+        vm.$validate();
       });
     }
 
     if (isDefined(attr.max) || attr.ngMax) {
       var maxVal;
-      ctrl.$validators.max = function(value) {
+      vm.$validators.max = function(value) {
         return !isValidDate(value) || isUndefined(maxVal) || parseDate(value) <= maxVal;
       };
       attr.$observe('max', function(val) {
         maxVal = parseObservedDateValue(val);
-        ctrl.$validate();
+        vm.$validate();
       });
     }
 
@@ -25480,27 +25480,27 @@ function createDateInputType(type, regexp, parseDate, format) {
   };
 }
 
-function badInputChecker(scope, element, attr, ctrl) {
+function badInputChecker(scope, element, attr, vm) {
   var node = element[0];
-  var nativeValidation = ctrl.$$hasNativeValidators = isObject(node.validity);
+  var nativeValidation = vm.$$hasNativeValidators = isObject(node.validity);
   if (nativeValidation) {
-    ctrl.$parsers.push(function(value) {
+    vm.$parsers.push(function(value) {
       var validity = element.prop(VALIDITY_STATE_PROPERTY) || {};
       return validity.badInput || validity.typeMismatch ? undefined : value;
     });
   }
 }
 
-function numberFormatterParser(ctrl) {
-  ctrl.$$parserName = 'number';
-  ctrl.$parsers.push(function(value) {
-    if (ctrl.$isEmpty(value))      return null;
+function numberFormatterParser(vm) {
+  vm.$$parserName = 'number';
+  vm.$parsers.push(function(value) {
+    if (vm.$isEmpty(value))      return null;
     if (NUMBER_REGEXP.test(value)) return parseFloat(value);
     return undefined;
   });
 
-  ctrl.$formatters.push(function(value) {
-    if (!ctrl.$isEmpty(value)) {
+  vm.$formatters.push(function(value) {
+    if (!vm.$isEmpty(value)) {
       if (!isNumber(value)) {
         throw ngModelMinErr('numfmt', 'Expected `{0}` to be a number', value);
       }
@@ -25576,59 +25576,59 @@ function isValidForStep(viewValue, stepBase, step) {
   return (value - stepBase) % step === 0;
 }
 
-function numberInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-  badInputChecker(scope, element, attr, ctrl);
-  numberFormatterParser(ctrl);
-  baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
+function numberInputType(scope, element, attr, vm, $sniffer, $browser) {
+  badInputChecker(scope, element, attr, vm);
+  numberFormatterParser(vm);
+  baseInputType(scope, element, attr, vm, $sniffer, $browser);
 
   var minVal;
   var maxVal;
 
   if (isDefined(attr.min) || attr.ngMin) {
-    ctrl.$validators.min = function(value) {
-      return ctrl.$isEmpty(value) || isUndefined(minVal) || value >= minVal;
+    vm.$validators.min = function(value) {
+      return vm.$isEmpty(value) || isUndefined(minVal) || value >= minVal;
     };
 
     attr.$observe('min', function(val) {
       minVal = parseNumberAttrVal(val);
       // TODO(matsko): implement validateLater to reduce number of validations
-      ctrl.$validate();
+      vm.$validate();
     });
   }
 
   if (isDefined(attr.max) || attr.ngMax) {
-    ctrl.$validators.max = function(value) {
-      return ctrl.$isEmpty(value) || isUndefined(maxVal) || value <= maxVal;
+    vm.$validators.max = function(value) {
+      return vm.$isEmpty(value) || isUndefined(maxVal) || value <= maxVal;
     };
 
     attr.$observe('max', function(val) {
       maxVal = parseNumberAttrVal(val);
       // TODO(matsko): implement validateLater to reduce number of validations
-      ctrl.$validate();
+      vm.$validate();
     });
   }
 
   if (isDefined(attr.step) || attr.ngStep) {
     var stepVal;
-    ctrl.$validators.step = function(modelValue, viewValue) {
-      return ctrl.$isEmpty(viewValue) || isUndefined(stepVal) ||
+    vm.$validators.step = function(modelValue, viewValue) {
+      return vm.$isEmpty(viewValue) || isUndefined(stepVal) ||
              isValidForStep(viewValue, minVal || 0, stepVal);
     };
 
     attr.$observe('step', function(val) {
       stepVal = parseNumberAttrVal(val);
       // TODO(matsko): implement validateLater to reduce number of validations
-      ctrl.$validate();
+      vm.$validate();
     });
   }
 }
 
-function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-  badInputChecker(scope, element, attr, ctrl);
-  numberFormatterParser(ctrl);
-  baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
+function rangeInputType(scope, element, attr, vm, $sniffer, $browser) {
+  badInputChecker(scope, element, attr, vm);
+  numberFormatterParser(vm);
+  baseInputType(scope, element, attr, vm, $sniffer, $browser);
 
-  var supportsRange = ctrl.$$hasNativeValidators && element[0].type === 'range',
+  var supportsRange = vm.$$hasNativeValidators && element[0].type === 'range',
       minVal = supportsRange ? 0 : undefined,
       maxVal = supportsRange ? 100 : undefined,
       stepVal = supportsRange ? 1 : undefined,
@@ -25637,43 +25637,43 @@ function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
       hasMaxAttr = isDefined(attr.max),
       hasStepAttr = isDefined(attr.step);
 
-  var originalRender = ctrl.$render;
+  var originalRender = vm.$render;
 
-  ctrl.$render = supportsRange && isDefined(validity.rangeUnderflow) && isDefined(validity.rangeOverflow) ?
+  vm.$render = supportsRange && isDefined(validity.rangeUnderflow) && isDefined(validity.rangeOverflow) ?
     //Browsers that implement range will set these values automatically, but reading the adjusted values after
     //$render would cause the min / max validators to be applied with the wrong value
     function rangeRender() {
       originalRender();
-      ctrl.$setViewValue(element.val());
+      vm.$setViewValue(element.val());
     } :
     originalRender;
 
   if (hasMinAttr) {
-    ctrl.$validators.min = supportsRange ?
+    vm.$validators.min = supportsRange ?
       // Since all browsers set the input to a valid value, we don't need to check validity
       function noopMinValidator() { return true; } :
       // non-support browsers validate the min val
       function minValidator(modelValue, viewValue) {
-        return ctrl.$isEmpty(viewValue) || isUndefined(minVal) || viewValue >= minVal;
+        return vm.$isEmpty(viewValue) || isUndefined(minVal) || viewValue >= minVal;
       };
 
     setInitialValueAndObserver('min', minChange);
   }
 
   if (hasMaxAttr) {
-    ctrl.$validators.max = supportsRange ?
+    vm.$validators.max = supportsRange ?
       // Since all browsers set the input to a valid value, we don't need to check validity
       function noopMaxValidator() { return true; } :
       // non-support browsers validate the max val
       function maxValidator(modelValue, viewValue) {
-        return ctrl.$isEmpty(viewValue) || isUndefined(maxVal) || viewValue <= maxVal;
+        return vm.$isEmpty(viewValue) || isUndefined(maxVal) || viewValue <= maxVal;
       };
 
     setInitialValueAndObserver('max', maxChange);
   }
 
   if (hasStepAttr) {
-    ctrl.$validators.step = supportsRange ?
+    vm.$validators.step = supportsRange ?
       function nativeStepValidator() {
         // Currently, only FF implements the spec on step change correctly (i.e. adjusting the
         // input element value to a valid value). It's possible that other browsers set the stepMismatch
@@ -25682,7 +25682,7 @@ function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
       } :
       // ngStep doesn't set the setp attr, so the browser doesn't adjust the input value as setting step would
       function stepValidator(modelValue, viewValue) {
-        return ctrl.$isEmpty(viewValue) || isUndefined(stepVal) ||
+        return vm.$isEmpty(viewValue) || isUndefined(stepVal) ||
                isValidForStep(viewValue, minVal || 0, stepVal);
       };
 
@@ -25700,7 +25700,7 @@ function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
   function minChange(val) {
     minVal = parseNumberAttrVal(val);
     // ignore changes before model is initialized
-    if (isNumberNaN(ctrl.$modelValue)) {
+    if (isNumberNaN(vm.$modelValue)) {
       return;
     }
 
@@ -25711,17 +25711,17 @@ function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
         elVal = minVal;
         element.val(elVal);
       }
-      ctrl.$setViewValue(elVal);
+      vm.$setViewValue(elVal);
     } else {
       // TODO(matsko): implement validateLater to reduce number of validations
-      ctrl.$validate();
+      vm.$validate();
     }
   }
 
   function maxChange(val) {
     maxVal = parseNumberAttrVal(val);
     // ignore changes before model is initialized
-    if (isNumberNaN(ctrl.$modelValue)) {
+    if (isNumberNaN(vm.$modelValue)) {
       return;
     }
 
@@ -25733,57 +25733,57 @@ function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
         // IE11 and Chrome don't set the value to the minVal when max < min
         elVal = maxVal < minVal ? minVal : maxVal;
       }
-      ctrl.$setViewValue(elVal);
+      vm.$setViewValue(elVal);
     } else {
       // TODO(matsko): implement validateLater to reduce number of validations
-      ctrl.$validate();
+      vm.$validate();
     }
   }
 
   function stepChange(val) {
     stepVal = parseNumberAttrVal(val);
     // ignore changes before model is initialized
-    if (isNumberNaN(ctrl.$modelValue)) {
+    if (isNumberNaN(vm.$modelValue)) {
       return;
     }
 
     // Some browsers don't adjust the input value correctly, but set the stepMismatch error
-    if (supportsRange && ctrl.$viewValue !== element.val()) {
-      ctrl.$setViewValue(element.val());
+    if (supportsRange && vm.$viewValue !== element.val()) {
+      vm.$setViewValue(element.val());
     } else {
       // TODO(matsko): implement validateLater to reduce number of validations
-      ctrl.$validate();
+      vm.$validate();
     }
   }
 }
 
-function urlInputType(scope, element, attr, ctrl, $sniffer, $browser) {
+function urlInputType(scope, element, attr, vm, $sniffer, $browser) {
   // Note: no badInputChecker here by purpose as `url` is only a validation
   // in browsers, i.e. we can always read out input.value even if it is not valid!
-  baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
-  stringBasedInputType(ctrl);
+  baseInputType(scope, element, attr, vm, $sniffer, $browser);
+  stringBasedInputType(vm);
 
-  ctrl.$$parserName = 'url';
-  ctrl.$validators.url = function(modelValue, viewValue) {
+  vm.$$parserName = 'url';
+  vm.$validators.url = function(modelValue, viewValue) {
     var value = modelValue || viewValue;
-    return ctrl.$isEmpty(value) || URL_REGEXP.test(value);
+    return vm.$isEmpty(value) || URL_REGEXP.test(value);
   };
 }
 
-function emailInputType(scope, element, attr, ctrl, $sniffer, $browser) {
+function emailInputType(scope, element, attr, vm, $sniffer, $browser) {
   // Note: no badInputChecker here by purpose as `url` is only a validation
   // in browsers, i.e. we can always read out input.value even if it is not valid!
-  baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
-  stringBasedInputType(ctrl);
+  baseInputType(scope, element, attr, vm, $sniffer, $browser);
+  stringBasedInputType(vm);
 
-  ctrl.$$parserName = 'email';
-  ctrl.$validators.email = function(modelValue, viewValue) {
+  vm.$$parserName = 'email';
+  vm.$validators.email = function(modelValue, viewValue) {
     var value = modelValue || viewValue;
-    return ctrl.$isEmpty(value) || EMAIL_REGEXP.test(value);
+    return vm.$isEmpty(value) || EMAIL_REGEXP.test(value);
   };
 }
 
-function radioInputType(scope, element, attr, ctrl) {
+function radioInputType(scope, element, attr, vm) {
   var doTrim = !attr.ngTrim || trim(attr.ngTrim) !== 'false';
   // make the name unique, if not defined
   if (isUndefined(attr.name)) {
@@ -25797,21 +25797,21 @@ function radioInputType(scope, element, attr, ctrl) {
       if (doTrim) {
         value = trim(value);
       }
-      ctrl.$setViewValue(value, ev && ev.type);
+      vm.$setViewValue(value, ev && ev.type);
     }
   };
 
   element.on('click', listener);
 
-  ctrl.$render = function() {
+  vm.$render = function() {
     var value = attr.value;
     if (doTrim) {
       value = trim(value);
     }
-    element[0].checked = (value === ctrl.$viewValue);
+    element[0].checked = (value === vm.$viewValue);
   };
 
-  attr.$observe('value', ctrl.$render);
+  attr.$observe('value', vm.$render);
 }
 
 function parseConstantExpr($parse, context, name, expression, fallback) {
@@ -25827,32 +25827,32 @@ function parseConstantExpr($parse, context, name, expression, fallback) {
   return fallback;
 }
 
-function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filter, $parse) {
+function checkboxInputType(scope, element, attr, vm, $sniffer, $browser, $filter, $parse) {
   var trueValue = parseConstantExpr($parse, scope, 'ngTrueValue', attr.ngTrueValue, true);
   var falseValue = parseConstantExpr($parse, scope, 'ngFalseValue', attr.ngFalseValue, false);
 
   var listener = function(ev) {
-    ctrl.$setViewValue(element[0].checked, ev && ev.type);
+    vm.$setViewValue(element[0].checked, ev && ev.type);
   };
 
   element.on('click', listener);
 
-  ctrl.$render = function() {
-    element[0].checked = ctrl.$viewValue;
+  vm.$render = function() {
+    element[0].checked = vm.$viewValue;
   };
 
   // Override the standard `$isEmpty` because the $viewValue of an empty checkbox is always set to `false`
   // This is because of the parser below, which compares the `$modelValue` with `trueValue` to convert
   // it to a boolean.
-  ctrl.$isEmpty = function(value) {
+  vm.$isEmpty = function(value) {
     return value === false;
   };
 
-  ctrl.$formatters.push(function(value) {
+  vm.$formatters.push(function(value) {
     return equals(value, trueValue);
   });
 
-  ctrl.$parsers.push(function(value) {
+  vm.$parsers.push(function(value) {
     return value ? trueValue : falseValue;
   });
 }
@@ -26051,9 +26051,9 @@ var inputDirective = ['$browser', '$sniffer', '$filter', '$parse',
     restrict: 'E',
     require: ['?ngModel'],
     link: {
-      pre: function(scope, element, attr, ctrls) {
-        if (ctrls[0]) {
-          (inputType[lowercase(attr.type)] || inputType.text)(scope, element, attr, ctrls[0], $sniffer,
+      pre: function(scope, element, attr, vms) {
+        if (vms[0]) {
+          (inputType[lowercase(attr.type)] || inputType.text)(scope, element, attr, vms[0], $sniffer,
                                                               $browser, $filter, $parse);
         }
       }
@@ -26434,8 +26434,8 @@ var ngBindHtmlDirective = ['$sce', '$parse', '$compile', function($sce, $parse, 
 var ngChangeDirective = valueFn({
   restrict: 'A',
   require: 'ngModel',
-  link: function(scope, element, attr, ctrl) {
-    ctrl.$viewChangeListeners.push(function() {
+  link: function(scope, element, attr, vm) {
+    vm.$viewChangeListeners.push(function() {
       scope.$eval(attr.ngChange);
     });
   }
@@ -27027,7 +27027,7 @@ var ngCloakDirective = ngDirective({
  *
  * <example name="ngControllerAs" module="controllerAsExample">
  *   <file name="index.html">
- *    <div id="ctrl-as-exmpl" ng-controller="SettingsController1 as settings">
+ *    <div id="vm-as-exmpl" ng-controller="SettingsController1 as settings">
  *      <label>Name: <input type="text" ng-model="settings.name"/></label>
  *      <button ng-click="settings.greet()">greet</button><br/>
  *      Contact:
@@ -27077,7 +27077,7 @@ var ngCloakDirective = ngDirective({
  *   </file>
  *   <file name="protractor.js" type="protractor">
  *     it('should check controller as', function() {
- *       var container = element(by.id('ctrl-as-exmpl'));
+ *       var container = element(by.id('vm-as-exmpl'));
  *         expect(container.element(by.model('settings.name'))
  *           .getAttribute('value')).toBe('John Smith');
  *
@@ -27111,7 +27111,7 @@ var ngCloakDirective = ngDirective({
  *
  * <example name="ngController" module="controllerExample">
  *  <file name="index.html">
- *   <div id="ctrl-exmpl" ng-controller="SettingsController2">
+ *   <div id="vm-exmpl" ng-controller="SettingsController2">
  *     <label>Name: <input type="text" ng-model="name"/></label>
  *     <button ng-click="greet()">greet</button><br/>
  *     Contact:
@@ -27161,7 +27161,7 @@ var ngCloakDirective = ngDirective({
  *  </file>
  *  <file name="protractor.js" type="protractor">
  *    it('should check controller', function() {
- *      var container = element(by.id('ctrl-exmpl'));
+ *      var container = element(by.id('vm-exmpl'));
  *
  *      expect(container.element(by.model('name'))
  *          .getAttribute('value')).toBe('John Smith');
@@ -27292,18 +27292,18 @@ var ngControllerDirective = [function() {
   <!-- Note: the `.csp` suffix in the example name triggers CSP mode in our http server! -->
   <example name="example.csp" module="cspExample" ng-csp="true">
     <file name="index.html">
-      <div ng-controller="MainController as ctrl">
+      <div ng-controller="MainController as vm">
         <div>
-          <button ng-click="ctrl.inc()" id="inc">Increment</button>
+          <button ng-click="vm.inc()" id="inc">Increment</button>
           <span id="counter">
-            {{ctrl.counter}}
+            {{vm.counter}}
           </span>
         </div>
 
         <div>
-          <button ng-click="ctrl.evil()" id="evil">Evil</button>
+          <button ng-click="vm.evil()" id="evil">Evil</button>
           <span id="evilError">
-            {{ctrl.evilError}}
+            {{vm.evilError}}
           </span>
         </div>
       </div>
@@ -27997,7 +27997,7 @@ var ngIfDirective = ['$animate', '$compile', function($animate, $compile) {
     terminal: true,
     restrict: 'A',
     $$tlb: true,
-    link: function($scope, $element, $attr, ctrl, $transclude) {
+    link: function($scope, $element, $attr, vm, $transclude) {
         var block, childScope, previousElements;
         $scope.$watch($attr.ngIf, function ngIfWatchAction(value) {
 
@@ -28234,7 +28234,7 @@ var ngIncludeDirective = ['$templateRequest', '$anchorScroll', '$animate',
           onloadExp = attr.onload || '',
           autoScrollExp = attr.autoscroll;
 
-      return function(scope, $element, $attr, ctrl, $transclude) {
+      return function(scope, $element, $attr, vm, $transclude) {
         var changeCounter = 0,
             currentScope,
             previousElement,
@@ -28275,7 +28275,7 @@ var ngIncludeDirective = ['$templateRequest', '$anchorScroll', '$animate',
 
               if (thisChangeId !== changeCounter) return;
               var newScope = scope.$new();
-              ctrl.template = response;
+              vm.template = response;
 
               // Note: This will also link all children of ng-include that were contained in the original
               // html. If that content contains controllers, ... they could pollute/change the scope.
@@ -28304,7 +28304,7 @@ var ngIncludeDirective = ['$templateRequest', '$anchorScroll', '$animate',
             scope.$emit('$includeContentRequested', src);
           } else {
             cleanupLastIncludeContent();
-            ctrl.template = null;
+            vm.template = null;
           }
         });
       };
@@ -28323,20 +28323,20 @@ var ngIncludeFillContentDirective = ['$compile',
       restrict: 'ECA',
       priority: -400,
       require: 'ngInclude',
-      link: function(scope, $element, $attr, ctrl) {
+      link: function(scope, $element, $attr, vm) {
         if (toString.call($element[0]).match(/SVG/)) {
           // WebKit: https://bugs.webkit.org/show_bug.cgi?id=135698 --- SVG elements do not
           // support innerHTML, so detect this here and try to generate the contents
           // specially.
           $element.empty();
-          $compile(jqLiteBuildFragment(ctrl.template, window.document).childNodes)(scope,
+          $compile(jqLiteBuildFragment(vm.template, window.document).childNodes)(scope,
               function namespaceAdaptedClone(clone) {
             $element.append(clone);
           }, {futureParentElement: $element});
           return;
         }
 
-        $element.html(ctrl.template);
+        $element.html(vm.template);
         $compile($element.contents())(scope);
       }
     };
@@ -28510,7 +28510,7 @@ var ngListDirective = function() {
     restrict: 'A',
     priority: 100,
     require: 'ngModel',
-    link: function(scope, element, attr, ctrl) {
+    link: function(scope, element, attr, vm) {
       var ngList = attr.ngList || ', ';
       var trimValues = attr.ngTrim !== 'false';
       var separator = trimValues ? trim(ngList) : ngList;
@@ -28530,8 +28530,8 @@ var ngListDirective = function() {
         return list;
       };
 
-      ctrl.$parsers.push(parse);
-      ctrl.$formatters.push(function(value) {
+      vm.$parsers.push(parse);
+      vm.$formatters.push(function(value) {
         if (isArray(value)) {
           return value.join(ngList);
         }
@@ -28540,7 +28540,7 @@ var ngListDirective = function() {
       });
 
       // Override the standard $isEmpty because an empty array means the input is empty.
-      ctrl.$isEmpty = function(value) {
+      vm.$isEmpty = function(value) {
         return !value || !value.length;
       };
     }
@@ -28817,7 +28817,7 @@ function NgModelController($scope, $exceptionHandler, $attr, $element, $parse, $
   this.$$success = {}; // keep valid keys here
   this.$pending = undefined; // keep pending keys here
   this.$name = $interpolate($attr.name || '', false)($scope);
-  this.$$parentForm = nullFormCtrl;
+  this.$$parentForm = nullFormvm;
   this.$options = defaultModelOptions;
   this.$$updateEvents = '';
   // Attach the correct context to the event handler function for updateOn
@@ -29477,7 +29477,7 @@ NgModelController.prototype = {
    * A user enters `ap` and then selects `Apricot` from the list.
    * Based on this, the autocomplete widget will call `$setViewValue({name: 'Apricot', id: 443})`,
    * but the rendered value will still be `ap`.
-   * The widget can then call `ctrl.$processModelValue()` to run the model -> view
+   * The widget can then call `vm.$processModelValue()` to run the model -> view
    * pipeline again, which formats the object to the string `Apricot`,
    * then updates the `$viewValue`, and finally renders it in the DOM.
    *
@@ -29545,10 +29545,10 @@ NgModelController.prototype = {
      </file>
      <file name="autocomplete.html">
        <div>
-         <input type="search" ng-model="$ctrl.searchTerm" />
+         <input type="search" ng-model="$vm.searchTerm" />
          <ul>
-           <li ng-repeat="item in $ctrl.items | filter:$ctrl.searchTerm">
-             <button ng-click="$ctrl.selectItem(item)">{{ item.name }}</button>
+           <li ng-repeat="item in $vm.items | filter:$vm.searchTerm">
+             <button ng-click="$vm.selectItem(item)">{{ item.name }}</button>
            </li>
          </ul>
        </div>
@@ -29608,7 +29608,7 @@ NgModelController.prototype = {
   }
 };
 
-function setupModelWatcher(ctrl) {
+function setupModelWatcher(vm) {
   // model -> value
   // Note: we cannot use a normal scope.$watch as we want to detect the following:
   // 1. scope value is 'a'
@@ -29617,18 +29617,18 @@ function setupModelWatcher(ctrl) {
   //    -> scope value did not change since the last digest as
   //       ng-change executes in apply phase
   // 4. view should be changed back to 'a'
-  ctrl.$$scope.$watch(function ngModelWatch(scope) {
-    var modelValue = ctrl.$$ngModelGet(scope);
+  vm.$$scope.$watch(function ngModelWatch(scope) {
+    var modelValue = vm.$$ngModelGet(scope);
 
     // if scope model value and ngModel value are out of sync
     // This cannot be moved to the action function, because it would not catch the
     // case where the model is changed in the ngChange function or the model setter
-    if (modelValue !== ctrl.$modelValue &&
+    if (modelValue !== vm.$modelValue &&
       // checks for NaN is needed to allow setting the model to NaN when there's an asyncValidator
       // eslint-disable-next-line no-self-compare
-      (ctrl.$modelValue === ctrl.$modelValue || modelValue === modelValue)
+      (vm.$modelValue === vm.$modelValue || modelValue === modelValue)
     ) {
-      ctrl.$$setModelValue(modelValue);
+      vm.$$setModelValue(modelValue);
     }
 
     return modelValue;
@@ -29870,40 +29870,40 @@ var ngModelDirective = ['$rootScope', function($rootScope) {
       element.addClass(PRISTINE_CLASS).addClass(UNTOUCHED_CLASS).addClass(VALID_CLASS);
 
       return {
-        pre: function ngModelPreLink(scope, element, attr, ctrls) {
-          var modelCtrl = ctrls[0],
-              formCtrl = ctrls[1] || modelCtrl.$$parentForm,
-              optionsCtrl = ctrls[2];
+        pre: function ngModelPreLink(scope, element, attr, vms) {
+          var modelvm = vms[0],
+              formvm = vms[1] || modelvm.$$parentForm,
+              optionsvm = vms[2];
 
-          if (optionsCtrl) {
-            modelCtrl.$options = optionsCtrl.$options;
+          if (optionsvm) {
+            modelvm.$options = optionsvm.$options;
           }
 
-          modelCtrl.$$initGetterSetters();
+          modelvm.$$initGetterSetters();
 
           // notify others, especially parent forms
-          formCtrl.$addControl(modelCtrl);
+          formvm.$addControl(modelvm);
 
           attr.$observe('name', function(newValue) {
-            if (modelCtrl.$name !== newValue) {
-              modelCtrl.$$parentForm.$$renameControl(modelCtrl, newValue);
+            if (modelvm.$name !== newValue) {
+              modelvm.$$parentForm.$$renameControl(modelvm, newValue);
             }
           });
 
           scope.$on('$destroy', function() {
-            modelCtrl.$$parentForm.$removeControl(modelCtrl);
+            modelvm.$$parentForm.$removeControl(modelvm);
           });
         },
-        post: function ngModelPostLink(scope, element, attr, ctrls) {
-          var modelCtrl = ctrls[0];
-          modelCtrl.$$setUpdateOnEvents();
+        post: function ngModelPostLink(scope, element, attr, vms) {
+          var modelvm = vms[0];
+          modelvm.$$setUpdateOnEvents();
 
           function setTouched() {
-            modelCtrl.$setTouched();
+            modelvm.$setTouched();
           }
 
           element.on('blur', function() {
-            if (modelCtrl.$touched) return;
+            if (modelvm.$touched) return;
 
             if ($rootScope.$$phase) {
               scope.$evalAsync(setTouched);
@@ -30283,7 +30283,7 @@ var ngModelOptionsDirective = function() {
   }
   NgModelOptionsController.prototype = {
     $onInit: function() {
-      var parentOptions = this.parentCtrl ? this.parentCtrl.$options : defaultModelOptions;
+      var parentOptions = this.parentvm ? this.parentvm.$options : defaultModelOptions;
       var modelOptionsDefinition = this.$$scope.$eval(this.$$attrs.ngModelOptions);
 
       this.$options = parentOptions.createChild(modelOptionsDefinition);
@@ -30294,7 +30294,7 @@ var ngModelOptionsDirective = function() {
     restrict: 'A',
     // ngModelOptions needs to run before ngModel and input directives
     priority: 10,
-    require: {parentCtrl: '?^^ngModelOptions'},
+    require: {parentvm: '?^^ngModelOptions'},
     bindToController: true,
     controller: NgModelOptionsController
   };
@@ -30756,18 +30756,18 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
   var optionTemplate = window.document.createElement('option'),
       optGroupTemplate = window.document.createElement('optgroup');
 
-    function ngOptionsPostLink(scope, selectElement, attr, ctrls) {
+    function ngOptionsPostLink(scope, selectElement, attr, vms) {
 
-      var selectCtrl = ctrls[0];
-      var ngModelCtrl = ctrls[1];
+      var selectvm = vms[0];
+      var ngModelvm = vms[1];
       var multiple = attr.multiple;
 
       // The emptyOption allows the application developer to provide their own custom "empty"
       // option when the viewValue does not match any of the option values.
       for (var i = 0, children = selectElement.children(), ii = children.length; i < ii; i++) {
         if (children[i].value === '') {
-          selectCtrl.hasEmptyOption = true;
-          selectCtrl.emptyOption = children.eq(i);
+          selectvm.hasEmptyOption = true;
+          selectvm.emptyOption = children.eq(i);
           break;
         }
       }
@@ -30775,7 +30775,7 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
       // The empty option will be compiled and rendered before we first generate the options
       selectElement.empty();
 
-      var providedEmptyOption = !!selectCtrl.emptyOption;
+      var providedEmptyOption = !!selectvm.emptyOption;
 
       var unknownOption = jqLite(optionTemplate.cloneNode(false));
       unknownOption.val('?');
@@ -30788,14 +30788,14 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
       var listFragment = $document[0].createDocumentFragment();
 
       // Overwrite the implementation. ngOptions doesn't use hashes
-      selectCtrl.generateUnknownOptionValue = function(val) {
+      selectvm.generateUnknownOptionValue = function(val) {
         return '?';
       };
 
       // Update the controller methods for multiple selectable options
       if (!multiple) {
 
-        selectCtrl.writeValue = function writeNgOptionsValue(value) {
+        selectvm.writeValue = function writeNgOptionsValue(value) {
           // The options might not be defined yet when ngModel tries to render
           if (!options) return;
 
@@ -30813,7 +30813,7 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
             // set always
 
             if (selectElement[0].value !== option.selectValue) {
-              selectCtrl.removeUnknownOption();
+              selectvm.removeUnknownOption();
 
               selectElement[0].value = option.selectValue;
               option.element.selected = true;
@@ -30821,17 +30821,17 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
 
             option.element.setAttribute('selected', 'selected');
           } else {
-            selectCtrl.selectUnknownOrEmptyOption(value);
+            selectvm.selectUnknownOrEmptyOption(value);
           }
         };
 
-        selectCtrl.readValue = function readNgOptionsValue() {
+        selectvm.readValue = function readNgOptionsValue() {
 
           var selectedOption = options.selectValueMap[selectElement.val()];
 
           if (selectedOption && !selectedOption.disabled) {
-            selectCtrl.unselectEmptyOption();
-            selectCtrl.removeUnknownOption();
+            selectvm.unselectEmptyOption();
+            selectvm.removeUnknownOption();
             return options.getViewValueFromOption(selectedOption);
           }
           return null;
@@ -30842,14 +30842,14 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
         // FIXME: When a user selects an option, this watch will fire needlessly
         if (ngOptions.trackBy) {
           scope.$watch(
-            function() { return ngOptions.getTrackByValue(ngModelCtrl.$viewValue); },
-            function() { ngModelCtrl.$render(); }
+            function() { return ngOptions.getTrackByValue(ngModelvm.$viewValue); },
+            function() { ngModelvm.$render(); }
           );
         }
 
       } else {
 
-        selectCtrl.writeValue = function writeNgOptionsMultiple(values) {
+        selectvm.writeValue = function writeNgOptionsMultiple(values) {
           // The options might not be defined yet when ngModel tries to render
           if (!options) return;
 
@@ -30865,7 +30865,7 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
         };
 
 
-        selectCtrl.readValue = function readNgOptionsMultiple() {
+        selectvm.readValue = function readNgOptionsMultiple() {
           var selectedValues = selectElement.val() || [],
               selections = [];
 
@@ -30882,13 +30882,13 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
         if (ngOptions.trackBy) {
 
           scope.$watchCollection(function() {
-            if (isArray(ngModelCtrl.$viewValue)) {
-              return ngModelCtrl.$viewValue.map(function(value) {
+            if (isArray(ngModelvm.$viewValue)) {
+              return ngModelvm.$viewValue.map(function(value) {
                 return ngOptions.getTrackByValue(value);
               });
             }
           }, function() {
-            ngModelCtrl.$render();
+            ngModelvm.$render();
           });
 
         }
@@ -30897,33 +30897,33 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
       if (providedEmptyOption) {
 
         // compile the element since there might be bindings in it
-        $compile(selectCtrl.emptyOption)(scope);
+        $compile(selectvm.emptyOption)(scope);
 
-        selectElement.prepend(selectCtrl.emptyOption);
+        selectElement.prepend(selectvm.emptyOption);
 
-        if (selectCtrl.emptyOption[0].nodeType === NODE_TYPE_COMMENT) {
+        if (selectvm.emptyOption[0].nodeType === NODE_TYPE_COMMENT) {
           // This means the empty option has currently no actual DOM node, probably because
           // it has been modified by a transclusion directive.
-          selectCtrl.hasEmptyOption = false;
+          selectvm.hasEmptyOption = false;
 
           // Redefine the registerOption function, which will catch
           // options that are added by ngIf etc. (rendering of the node is async because of
           // lazy transclusion)
-          selectCtrl.registerOption = function(optionScope, optionEl) {
+          selectvm.registerOption = function(optionScope, optionEl) {
             if (optionEl.val() === '') {
-              selectCtrl.hasEmptyOption = true;
-              selectCtrl.emptyOption = optionEl;
-              selectCtrl.emptyOption.removeClass('ng-scope');
+              selectvm.hasEmptyOption = true;
+              selectvm.emptyOption = optionEl;
+              selectvm.emptyOption.removeClass('ng-scope');
               // This ensures the new empty option is selected if previously no option was selected
-              ngModelCtrl.$render();
+              ngModelvm.$render();
 
               optionEl.on('$destroy', function() {
-                var needsRerender = selectCtrl.$isEmptyOptionSelected();
+                var needsRerender = selectvm.$isEmptyOptionSelected();
 
-                selectCtrl.hasEmptyOption = false;
-                selectCtrl.emptyOption = undefined;
+                selectvm.hasEmptyOption = false;
+                selectvm.emptyOption = undefined;
 
-                if (needsRerender) ngModelCtrl.$render();
+                if (needsRerender) ngModelvm.$render();
               });
             }
           };
@@ -30931,7 +30931,7 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
         } else {
           // remove the class, which is added automatically because we recompile the element and it
           // becomes the compilation root
-          selectCtrl.emptyOption.removeClass('ng-scope');
+          selectvm.emptyOption.removeClass('ng-scope');
         }
 
       }
@@ -30973,7 +30973,7 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
       }
 
       function updateOptions() {
-        var previousValue = options && selectCtrl.readValue();
+        var previousValue = options && selectvm.readValue();
 
         // We must remove all current options, but cannot simply set innerHTML = null
         // since the providedEmptyOption might have an ngIf on it that inserts comments which we
@@ -31029,15 +31029,15 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
 
         selectElement[0].appendChild(listFragment);
 
-        ngModelCtrl.$render();
+        ngModelvm.$render();
 
         // Check to see if the value has changed due to the update to the options
-        if (!ngModelCtrl.$isEmpty(previousValue)) {
-          var nextValue = selectCtrl.readValue();
+        if (!ngModelvm.$isEmpty(previousValue)) {
+          var nextValue = selectvm.readValue();
           var isNotPrimitive = ngOptions.trackBy || multiple;
           if (isNotPrimitive ? !equals(previousValue, nextValue) : previousValue !== nextValue) {
-            ngModelCtrl.$setViewValue(nextValue);
-            ngModelCtrl.$render();
+            ngModelvm.$setViewValue(nextValue);
+            ngModelvm.$render();
           }
         }
       }
@@ -31048,11 +31048,11 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
     terminal: true,
     require: ['select', 'ngModel'],
     link: {
-      pre: function ngOptionsPreLink(scope, selectElement, attr, ctrls) {
+      pre: function ngOptionsPreLink(scope, selectElement, attr, vms) {
         // Deactivate the SelectController.register method to prevent
         // option directives from accidentally registering themselves
         // (and unwanted $destroy handlers etc.)
-        ctrls[0].registerOption = noop;
+        vms[0].registerOption = noop;
       },
       post: ngOptionsPostLink
     }
@@ -31805,7 +31805,7 @@ var ngRepeatDirective = ['$parse', '$animate', '$compile', function($parse, $ani
         };
       }
 
-      return function ngRepeatLink($scope, $element, $attr, ctrl, $transclude) {
+      return function ngRepeatLink($scope, $element, $attr, vm, $transclude) {
 
         if (trackByExpGetter) {
           trackByIdExpFn = function(key, value, index) {
@@ -32614,7 +32614,7 @@ var ngSwitchWhenDirective = ngDirective({
   priority: 1200,
   require: '^ngSwitch',
   multiElement: true,
-  link: function(scope, element, attrs, ctrl, $transclude) {
+  link: function(scope, element, attrs, vm, $transclude) {
 
     var cases = attrs.ngSwitchWhen.split(attrs.ngSwitchWhenSeparator).sort().filter(
       // Filter duplicate cases
@@ -32622,8 +32622,8 @@ var ngSwitchWhenDirective = ngDirective({
     );
 
     forEach(cases, function(whenCase) {
-      ctrl.cases['!' + whenCase] = (ctrl.cases['!' + whenCase] || []);
-      ctrl.cases['!' + whenCase].push({ transclude: $transclude, element: element });
+      vm.cases['!' + whenCase] = (vm.cases['!' + whenCase] || []);
+      vm.cases['!' + whenCase].push({ transclude: $transclude, element: element });
     });
   }
 });
@@ -32633,9 +32633,9 @@ var ngSwitchDefaultDirective = ngDirective({
   priority: 1200,
   require: '^ngSwitch',
   multiElement: true,
-  link: function(scope, element, attr, ctrl, $transclude) {
-    ctrl.cases['?'] = (ctrl.cases['?'] || []);
-    ctrl.cases['?'].push({ transclude: $transclude, element: element });
+  link: function(scope, element, attr, vm, $transclude) {
+    vm.cases['?'] = (vm.cases['?'] || []);
+    vm.cases['?'].push({ transclude: $transclude, element: element });
    }
 });
 
@@ -32972,12 +32972,12 @@ function setOptionSelectedStatus(optionEl, value) {
  *   .directive('unknownValueError', function() {
  *     return {
  *       require: ['ngModel', 'select'],
- *       link: function(scope, element, attrs, ctrls) {
- *         var ngModelCtrl = ctrls[0];
- *         var selectCtrl = ctrls[1];
+ *       link: function(scope, element, attrs, vms) {
+ *         var ngModelvm = vms[0];
+ *         var selectvm = vms[1];
  *
- *         ngModelCtrl.$validators.unknownValue = function(modelValue, viewValue) {
- *           if (selectCtrl.$isUnknownOptionSelected()) {
+ *         ngModelvm.$validators.unknownValue = function(modelValue, viewValue) {
+ *           if (selectvm.$isUnknownOptionSelected()) {
  *             return false;
  *           }
  *
@@ -33026,14 +33026,14 @@ function setOptionSelectedStatus(optionEl, value) {
  *     return {
  *       priority: 1, // This directive must run after the required directive has added its validator
  *       require: ['ngModel', 'select'],
- *       link: function(scope, element, attrs, ctrls) {
- *         var ngModelCtrl = ctrls[0];
- *         var selectCtrl = ctrls[1];
+ *       link: function(scope, element, attrs, vms) {
+ *         var ngModelvm = vms[0];
+ *         var selectvm = vms[1];
  *
- *         var originalRequiredValidator = ngModelCtrl.$validators.required;
+ *         var originalRequiredValidator = ngModelvm.$validators.required;
  *
- *         ngModelCtrl.$validators.required = function() {
- *           if (attrs.required && selectCtrl.$isUnknownOptionSelected()) {
+ *         ngModelvm.$validators.required = function() {
+ *           if (attrs.required && selectvm.$isUnknownOptionSelected()) {
  *             return false;
  *           }
  *
@@ -33072,7 +33072,7 @@ var SelectController =
   self.selectValueMap = {}; // Keys are the hashed values, values the original values
 
   // If the ngModel doesn't get provided then provide a dummy noop version to prevent errors
-  self.ngModelCtrl = noopNgModelController;
+  self.ngModelvm = noopNgModelController;
   self.multiple = false;
 
   // The "unknown" option is one that is prepended to the list if the viewValue
@@ -33271,7 +33271,7 @@ var SelectController =
     renderScheduled = true;
     $scope.$$postDigest(function() {
       renderScheduled = false;
-      self.ngModelCtrl.$render();
+      self.ngModelvm.$render();
     });
   }
 
@@ -33285,8 +33285,8 @@ var SelectController =
       if ($scope.$$destroyed) return;
 
       updateScheduled = false;
-      self.ngModelCtrl.$setViewValue(self.readValue());
-      if (renderAfter) self.ngModelCtrl.$render();
+      self.ngModelvm.$setViewValue(self.readValue());
+      if (renderAfter) self.ngModelvm.$render();
     });
   }
 
@@ -33370,8 +33370,8 @@ var SelectController =
         if (self.multiple) {
           scheduleViewValueUpdate(true);
         } else {
-          self.ngModelCtrl.$setViewValue(null);
-          self.ngModelCtrl.$render();
+          self.ngModelvm.$setViewValue(null);
+          self.ngModelvm.$render();
         }
       }
     });
@@ -33676,28 +33676,28 @@ var selectDirective = function() {
     }
   };
 
-  function selectPreLink(scope, element, attr, ctrls) {
+  function selectPreLink(scope, element, attr, vms) {
 
-      var selectCtrl = ctrls[0];
-      var ngModelCtrl = ctrls[1];
+      var selectvm = vms[0];
+      var ngModelvm = vms[1];
 
       // if ngModel is not defined, we don't need to do anything but set the registerOption
       // function to noop, so options don't get added internally
-      if (!ngModelCtrl) {
-        selectCtrl.registerOption = noop;
+      if (!ngModelvm) {
+        selectvm.registerOption = noop;
         return;
       }
 
 
-      selectCtrl.ngModelCtrl = ngModelCtrl;
+      selectvm.ngModelvm = ngModelvm;
 
       // When the selected item(s) changes we delegate getting the value of the select control
       // to the `readValue` method, which can be changed if the select can have multiple
       // selected values or if the options are being generated by `ngOptions`
       element.on('change', function() {
-        selectCtrl.removeUnknownOption();
+        selectvm.removeUnknownOption();
         scope.$apply(function() {
-          ngModelCtrl.$setViewValue(selectCtrl.readValue());
+          ngModelvm.$setViewValue(selectvm.readValue());
         });
       });
 
@@ -33706,25 +33706,25 @@ var selectDirective = function() {
       // we have to add an extra watch since ngModel doesn't work well with arrays - it
       // doesn't trigger rendering if only an item in the array changes.
       if (attr.multiple) {
-        selectCtrl.multiple = true;
+        selectvm.multiple = true;
 
         // Read value now needs to check each option to see if it is selected
-        selectCtrl.readValue = function readMultipleValue() {
+        selectvm.readValue = function readMultipleValue() {
           var array = [];
           forEach(element.find('option'), function(option) {
             if (option.selected && !option.disabled) {
               var val = option.value;
-              array.push(val in selectCtrl.selectValueMap ? selectCtrl.selectValueMap[val] : val);
+              array.push(val in selectvm.selectValueMap ? selectvm.selectValueMap[val] : val);
             }
           });
           return array;
         };
 
         // Write value now needs to set the selected property of each matching option
-        selectCtrl.writeValue = function writeMultipleValue(value) {
+        selectvm.writeValue = function writeMultipleValue(value) {
           forEach(element.find('option'), function(option) {
             var shouldBeSelected = !!value && (includes(value, option.value) ||
-                                               includes(value, selectCtrl.selectValueMap[option.value]));
+                                               includes(value, selectvm.selectValueMap[option.value]));
             var currentlySelected = option.selected;
 
             // Support: IE 9-11 only, Edge 12-15+
@@ -33745,36 +33745,36 @@ var selectDirective = function() {
         // we need to work of an array, so we need to see if anything was inserted/removed
         var lastView, lastViewRef = NaN;
         scope.$watch(function selectMultipleWatch() {
-          if (lastViewRef === ngModelCtrl.$viewValue && !equals(lastView, ngModelCtrl.$viewValue)) {
-            lastView = shallowCopy(ngModelCtrl.$viewValue);
-            ngModelCtrl.$render();
+          if (lastViewRef === ngModelvm.$viewValue && !equals(lastView, ngModelvm.$viewValue)) {
+            lastView = shallowCopy(ngModelvm.$viewValue);
+            ngModelvm.$render();
           }
-          lastViewRef = ngModelCtrl.$viewValue;
+          lastViewRef = ngModelvm.$viewValue;
         });
 
         // If we are a multiple select then value is now a collection
         // so the meaning of $isEmpty changes
-        ngModelCtrl.$isEmpty = function(value) {
+        ngModelvm.$isEmpty = function(value) {
           return !value || value.length === 0;
         };
 
       }
     }
 
-    function selectPostLink(scope, element, attrs, ctrls) {
+    function selectPostLink(scope, element, attrs, vms) {
       // if ngModel is not defined, we don't need to do anything
-      var ngModelCtrl = ctrls[1];
-      if (!ngModelCtrl) return;
+      var ngModelvm = vms[1];
+      if (!ngModelvm) return;
 
-      var selectCtrl = ctrls[0];
+      var selectvm = vms[0];
 
       // We delegate rendering to the `writeValue` method, which can be changed
       // if the select can have multiple selected values or if the options are being
       // generated by `ngOptions`.
       // This must be done in the postLink fn to prevent $render to be called before
       // all nodes have been linked correctly.
-      ngModelCtrl.$render = function() {
-        selectCtrl.writeValue(ngModelCtrl.$viewValue);
+      ngModelvm.$render = function() {
+        selectvm.writeValue(ngModelvm.$viewValue);
       };
     }
 };
@@ -33807,13 +33807,13 @@ var optionDirective = ['$interpolate', function($interpolate) {
       return function(scope, element, attr) {
         // This is an optimization over using ^^ since we don't want to have to search
         // all the way to the root of the DOM for every single option element
-        var selectCtrlName = '$selectController',
+        var selectvmName = '$selectController',
             parent = element.parent(),
-            selectCtrl = parent.data(selectCtrlName) ||
-              parent.parent().data(selectCtrlName); // in case we are in optgroup
+            selectvm = parent.data(selectvmName) ||
+              parent.parent().data(selectvmName); // in case we are in optgroup
 
-        if (selectCtrl) {
-          selectCtrl.registerOption(scope, element, attr, interpolateValueFn, interpolateTextFn);
+        if (selectvm) {
+          selectvm.registerOption(scope, element, attr, interpolateValueFn, interpolateTextFn);
         }
       };
     }
@@ -33887,16 +33887,16 @@ var requiredDirective = function() {
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function(scope, elm, attr, ctrl) {
-      if (!ctrl) return;
+    link: function(scope, elm, attr, vm) {
+      if (!vm) return;
       attr.required = true; // force truthy in case we are on non input element
 
-      ctrl.$validators.required = function(modelValue, viewValue) {
-        return !attr.required || !ctrl.$isEmpty(viewValue);
+      vm.$validators.required = function(modelValue, viewValue) {
+        return !attr.required || !vm.$isEmpty(viewValue);
       };
 
       attr.$observe('required', function() {
-        ctrl.$validate();
+        vm.$validate();
       });
     }
   };
@@ -33987,8 +33987,8 @@ var patternDirective = function() {
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function(scope, elm, attr, ctrl) {
-      if (!ctrl) return;
+    link: function(scope, elm, attr, vm) {
+      if (!vm) return;
 
       var regexp, patternExp = attr.ngPattern || attr.pattern;
       attr.$observe('pattern', function(regex) {
@@ -34003,12 +34003,12 @@ var patternDirective = function() {
         }
 
         regexp = regex || undefined;
-        ctrl.$validate();
+        vm.$validate();
       });
 
-      ctrl.$validators.pattern = function(modelValue, viewValue) {
+      vm.$validators.pattern = function(modelValue, viewValue) {
         // HTML5 pattern constraint validates the input value, so we validate the viewValue
-        return ctrl.$isEmpty(viewValue) || isUndefined(regexp) || regexp.test(viewValue);
+        return vm.$isEmpty(viewValue) || isUndefined(regexp) || regexp.test(viewValue);
       };
     }
   };
@@ -34089,17 +34089,17 @@ var maxlengthDirective = function() {
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function(scope, elm, attr, ctrl) {
-      if (!ctrl) return;
+    link: function(scope, elm, attr, vm) {
+      if (!vm) return;
 
       var maxlength = -1;
       attr.$observe('maxlength', function(value) {
         var intVal = toInt(value);
         maxlength = isNumberNaN(intVal) ? -1 : intVal;
-        ctrl.$validate();
+        vm.$validate();
       });
-      ctrl.$validators.maxlength = function(modelValue, viewValue) {
-        return (maxlength < 0) || ctrl.$isEmpty(viewValue) || (viewValue.length <= maxlength);
+      vm.$validators.maxlength = function(modelValue, viewValue) {
+        return (maxlength < 0) || vm.$isEmpty(viewValue) || (viewValue.length <= maxlength);
       };
     }
   };
@@ -34178,16 +34178,16 @@ var minlengthDirective = function() {
   return {
     restrict: 'A',
     require: '?ngModel',
-    link: function(scope, elm, attr, ctrl) {
-      if (!ctrl) return;
+    link: function(scope, elm, attr, vm) {
+      if (!vm) return;
 
       var minlength = 0;
       attr.$observe('minlength', function(value) {
         minlength = toInt(value) || 0;
-        ctrl.$validate();
+        vm.$validate();
       });
-      ctrl.$validators.minlength = function(modelValue, viewValue) {
-        return ctrl.$isEmpty(viewValue) || viewValue.length >= minlength;
+      vm.$validators.minlength = function(modelValue, viewValue) {
+        return vm.$isEmpty(viewValue) || viewValue.length >= minlength;
       };
     }
   };

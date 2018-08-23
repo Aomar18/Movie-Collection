@@ -17,7 +17,7 @@ router.post('/', (req,res) => {
 
 router.get('/', (req,res) => {
     console.log('in GET');
-    const query = 'SELECT * FROM "genre";'
+    const query = 'SELECT "genre".*,  COUNT("movies") FROM "genre" JOIN "movies" ON "genre"."id" = "movies"."genre_id" GROUP BY "genre"."id";'
     pool.query(query).then((results) => {
         console.log(results);
         res.send(results.rows);

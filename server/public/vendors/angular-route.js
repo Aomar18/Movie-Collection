@@ -978,7 +978,7 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
              deps="angular-route.js;angular-animate.js"
              animations="true" fixBase="true">
       <file name="index.html">
-        <div ng-controller="MainCtrl as main">
+        <div ng-controller="Mainvm as main">
           Choose:
           <a href="Book/Moby">Moby</a> |
           <a href="Book/Moby/ch/1">Moby: Ch1</a> |
@@ -1060,29 +1060,29 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
               $routeProvider
                 .when('/Book/:bookId', {
                   templateUrl: 'book.html',
-                  controller: 'BookCtrl',
+                  controller: 'Bookvm',
                   controllerAs: 'book'
                 })
                 .when('/Book/:bookId/ch/:chapterId', {
                   templateUrl: 'chapter.html',
-                  controller: 'ChapterCtrl',
+                  controller: 'Chaptervm',
                   controllerAs: 'chapter'
                 });
 
               $locationProvider.html5Mode(true);
           }])
-          .controller('MainCtrl', ['$route', '$routeParams', '$location',
-            function MainCtrl($route, $routeParams, $location) {
+          .controller('Mainvm', ['$route', '$routeParams', '$location',
+            function Mainvm($route, $routeParams, $location) {
               this.$route = $route;
               this.$location = $location;
               this.$routeParams = $routeParams;
           }])
-          .controller('BookCtrl', ['$routeParams', function BookCtrl($routeParams) {
-            this.name = 'BookCtrl';
+          .controller('Bookvm', ['$routeParams', function Bookvm($routeParams) {
+            this.name = 'Bookvm';
             this.params = $routeParams;
           }])
-          .controller('ChapterCtrl', ['$routeParams', function ChapterCtrl($routeParams) {
-            this.name = 'ChapterCtrl';
+          .controller('Chaptervm', ['$routeParams', function Chaptervm($routeParams) {
+            this.name = 'Chaptervm';
             this.params = $routeParams;
           }]);
 
@@ -1092,14 +1092,14 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
         it('should load and compile correct template', function() {
           element(by.linkText('Moby: Ch1')).click();
           var content = element(by.css('[ng-view]')).getText();
-          expect(content).toMatch(/controller: ChapterCtrl/);
+          expect(content).toMatch(/controller: Chaptervm/);
           expect(content).toMatch(/Book Id: Moby/);
           expect(content).toMatch(/Chapter Id: 1/);
 
           element(by.partialLinkText('Scarlet')).click();
 
           content = element(by.css('[ng-view]')).getText();
-          expect(content).toMatch(/controller: BookCtrl/);
+          expect(content).toMatch(/controller: Bookvm/);
           expect(content).toMatch(/Book Id: Scarlet/);
         });
       </file>
@@ -1121,7 +1121,7 @@ function ngViewFactory($route, $anchorScroll, $animate) {
     terminal: true,
     priority: 400,
     transclude: 'element',
-    link: function(scope, $element, attr, ctrl, $transclude) {
+    link: function(scope, $element, attr, vm, $transclude) {
         var currentScope,
             currentElement,
             previousLeaveAnimation,
