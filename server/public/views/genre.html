@@ -1,4 +1,10 @@
-<div ng-controller="GenreController as vm">
+<div >
 
     <h1>Add a Category</h1>
+    <div>
+        <form ng-submit="vm.sendData()">
+            <input type="text" class="genreInput" ng-model="vm.genre">
+            <button class="btn">Submit</button>
+        </form>
+    </div>
 </div>

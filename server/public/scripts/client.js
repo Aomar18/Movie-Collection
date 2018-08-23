@@ -13,11 +13,11 @@ myApp.config( function ( $routeProvider){
     .when( '/movies', {
         templateUrl: '/views/movies.html',
         controller: 'MovieController as vm'
-     }) //end rental
+     }) //end movie
      .when('/genre', {
         templateUrl: 'views/genre.html',
         controller: 'GenreController as vm'
-     })// end sale
+     })// end genre
      .otherwise({
          templateUrl: '/views/404.html' // error page
      }) // end
