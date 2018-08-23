@@ -15,6 +15,18 @@ router.post('/', (req,res) => {
     })
 })
 
+router.get('/', (req,res) => {
+    console.log('in GET');
+    const query = 'SELECT * FROM "genre";'
+    pool.query(query).then((results) => {
+        console.log(results);
+        res.send(results.rows);
+    }).catch((error) => {
+        console.log('Error getting information from DB', error);
+        res.sendStatus(500);
+    })
+})
+
 
 module.exports = router;
 

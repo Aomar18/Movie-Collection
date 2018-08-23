@@ -1,10 +1,28 @@
-<div >
+<div>
 
     <h1>Add a Category</h1>
     <div>
         <form ng-submit="vm.sendData()">
-            <input type="text" class="genreInput" ng-model="vm.genre">
+            <input type="text" class="genreInput" placeholder="Add a project" ng-model="vm.genre">
             <button class="btn">Submit</button>
         </form>
+    </div>
+    <div>
+        <table>
+            <thead id="thead-container">
+                <tr>
+                    <th>Project</th>
+                    <th>Total Movies</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-container">
+                <tr ng-repeat="items in vm.genreList">
+                    <td>{{items.genre}}</td>
+                    <!-- <td><Label>Total</Label>{{total}}</td>
+                    <td><button ng-click="" >Delete</button></td> -->
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
