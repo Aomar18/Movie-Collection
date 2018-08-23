@@ -31,9 +31,21 @@ myApp.controller('GenreController', function ($http) {
         }).catch(function (error) {
             alert('Error in getting data', error);
         })
-
     }
+    self.deleteGenre = function (id) {
+        console.log('Trying to delete this project');
+        $http({
+            method: 'DELETE',
+            url: '/genre/' + id
+        }).then(function (response){
+            getData();
+            alert('You have deleted this project, no take backs');
 
+        }).catch(function(error){
+            alert('Can not delete yet there is something wrong. Check here:', error);
+        });
+        
+    }
 
 
 })

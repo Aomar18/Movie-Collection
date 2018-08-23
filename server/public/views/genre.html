@@ -19,8 +19,8 @@
             <tbody id="tbody-container">
                 <tr ng-repeat="items in vm.genreList">
                     <td>{{items.genre}}</td>
-                    <!-- <td><Label>Total</Label>{{total}}</td>
-                    <td><button ng-click="" >Delete</button></td> -->
+                   <td><Label></Label></td>
+                    <td><button ng-click="vm.deleteGenre(items.id)" >Delete</button></td>
                 </tr>
             </tbody>
         </table>

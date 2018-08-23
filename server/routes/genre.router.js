@@ -12,8 +12,8 @@ router.post('/', (req,res) => {
     }).catch((error) => {
         console.log('Error in Post route');
         res.sendStatus(500);
-    })
-})
+    });
+});
 
 router.get('/', (req,res) => {
     console.log('in GET');
@@ -24,8 +24,20 @@ router.get('/', (req,res) => {
     }).catch((error) => {
         console.log('Error getting information from DB', error);
         res.sendStatus(500);
-    })
-})
+    });
+});
+
+router.delete('/:id', (req,res) => {
+    console.log('Deleting in progress', );
+    let deleteThis = req.params.id;
+    const query = 'DELETE FROM "genre" WHERE "id" = $1;';
+    pool.query(query, [deleteThis]).then((results) => {
+        res.sendStatus(201);
+    }).catch((error) => {
+        console.log(`Oh No You can't delete yet`, error);
+        res.sendStatus(500);
+    });
+});
 
 
 module.exports = router;
