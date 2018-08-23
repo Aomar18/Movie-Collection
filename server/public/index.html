@@ -6,21 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Movie Collection</title>
-
+    <link rel="shortcut icon" href="https://media.licdn.com/dms/image/C4D03AQFI2onHwzaKSQ/profile-displayphoto-shrink_200_200/0?e=1540425600&v=beta&t=8swnf4yCxXJBnT2jMvN4GG8SKDYhzbU1JyXA8gkHQbA">
     <link rel="stylesheet" href="styles/style.css">
     <script src="vendors/angular.js"></script>
     <script src="vendors/angular-route.js"></script>
+    
     <link rel="stylesheet" href="vendors/angular-material.css">
     <script src="vendors/angular-animate.min.js"></script>
     <script src="vendors/angular-aria.min.js"></script>
     <script src="vendors/angular-messages.min.js"></script>
-
-
+    
     <script src="scripts/client.js"></script>
+    <script src="scripts/controllers/genre.controller.js"></script>
+    <script src="scripts/controllers/movies.controller.js"></script>
+
 </head>
+<header>
+    <h1>Best Movies</h1>
+</header>
+<body ng-app="myApp">
+<nav>
+    <!-- try to create a login page -->
+    <!-- create a nav bar -->
+    <a href="#!/">Home</a>
+    <a href="#!/movies">Movies</a>
+    <a href="#!/genre">Genre</a>
+</nav>
 
-<body>
-
+<ng-view></ng-view>
 </body>
 
 </html>
