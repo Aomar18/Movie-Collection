@@ -1,6 +1,6 @@
 # Movie-Collection
 
-This application create two views that allows you to do a few things with your movie collection. The "add movie" view allows you to add a new movie to your collection. Once you have completed adding a movie it will automatically add this movie into your collection and appear on the screen. If you get rid of a movie there is a feature that will delete that movie. Each movie shows different properties of the movie such as the name, runtime, release date and an image if provided. In the manage genre view you can see your current projects and the total 
+This application create two views that allows you to do a few things with your movie collection. The "add movie" view allows you to add a new movie to your collection. Once you have completed adding a movie it will automatically add this movie into your collection and appear on the screen. If you get rid of a movie there is a feature that will delete that movie. Each movie shows different properties of the movie such as the name, runtime, release date and an image if provided. In the manage genre view you can see your current projects and the total movies within each project. You are able to delete empty projects but not projects that contain at least 1 movie. This is the extent of my project if you have any questions/comments please contact me.
 
 ##SQL 
 
