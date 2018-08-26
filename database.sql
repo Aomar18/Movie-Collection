@@ -13,3 +13,8 @@ CREATE TABLE genre (
     genre varchar(150),
     
 );
+
+SELECT * FROM "movies";
+
+
+SELECT "genre".*,  COUNT("movies") FROM "genre" LEFT JOIN "movies" ON "genre"."id" = "movies"."genre_id" GROUP BY "genre"."id";

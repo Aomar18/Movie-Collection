@@ -2,7 +2,7 @@
 
     <h1>Add a Category</h1>
     <div>
-        <form ng-submit="vm.sendData()">
+        <form ng-submit="vm.sendData(vm.genre)">
             <input type="text" class="genreInput" placeholder="Add a project" ng-model="vm.genre">
             <button class="btn">Submit</button>
         </form>
@@ -20,7 +20,7 @@
                 <tr ng-repeat="items in vm.genreList" >
                     <td>{{items.genre}}</td>
                    <td><Label>{{items.count}}</Label></td>
-                    <td><button ng-click="vm.deleteGenre(items.id)" >Delete</button></td>
+                    <td><button ng-click="vm.deleteGenre(items)" >Delete</button></td>
                 </tr>
             </tbody>
         </table>

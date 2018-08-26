@@ -4,7 +4,6 @@ console.log('JS');
 
 
 let myApp = angular.module('myApp', ['ngRoute', 'ngMaterial','ngMessages']);
-console.log('in controller');
 
 
 myApp.config( function ( $routeProvider){

@@ -1,19 +1,42 @@
-<div ng-controller="MovieController as vm">
+<div>
     <h1>Add a movie!</h1>
 
-    <div layout-gt-xs="row">
-        <form ng-submit="addMovie()">
+    <div>
+        <form ng-submit="vm.sendMovie()">
             <input type="text" placeholder="Name" ng-model="vm.name">
-            <select id="genre">
-                <option value=""></option>
+            <select id="genre" ng-model="vm.genre">
+                <option value="">---Please select---</option>
+                <option ng-repeat="genres in vm.genreList" value="{{genres.id}}">{{genres.genre}}</option>
+
+
             </select>
             <md-content layout-padding ng-cloak>
-                <h4>Date Aired</h4>
-                <md-datepicker ng-model="vm.myDate" md-placeholder="8/23/2018"></md-datepicker>
+                <div layout-gt-xs="row">
+                    <div flex-gt-xs>
+                        <h4>Date Aired</h4>
+                        <md-datepicker ng-model="vm.date" md-placeholder="8/23/2018"></md-datepicker>
+                    </div>
+                </div>
             </md-content>
-
+            <input type="text" placeholder="Image" ng-model="vm.image">
             <input type="number" placeholder="Runtime" ng-model="vm.runtime">
-            <button ng-model-options="">Submit</button>
+            <button>Submit</button>
         </form>
+        <div ng-repeat="item in vm.movieList">
+            <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{item.name}}</span>
+                        <span class="md-subhead">{{item.release_date}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-lg card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <img ng-src="{{item.image_path}}">
+                    <md-button ng-click="vm.deleteMovie(item.id)">I don't like this movie</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
     </div>
-</div>

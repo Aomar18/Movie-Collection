@@ -3,10 +3,10 @@ const pool = require('../module/pool.js')
 
 router.post('/', (req,res) => {
     
-    const genreAdded = req.body;
-    console.log('in post', genreAdded);
-    const query = 'INSERT INTO "genre" ("genre") VALUES($1);'
-    pool.query(query, [genreAdded.genre]).then((response) => {
+    const movieAdded = req.body;
+    console.log('in post', movieAdded);
+    const query = 'INSERT INTO "movies" ("name", "release_date", "runtime", "image_path", "genre_id") VALUES($1, $2, $3, $4, $5);'
+    pool.query(query, [movieAdded.name, movieAdded.release_date, movieAdded.runtime, movieAdded.image_path, movieAdded.genre_id]).then((response) => {
         console.log('success in making query', response);
         res.sendStatus(201);
     }).catch((error) => {
@@ -17,7 +17,7 @@ router.post('/', (req,res) => {
 
 router.get('/', (req,res) => {
     console.log('in GET');
-    const query = 'SELECT "genre".*,  COUNT("movies") FROM "genre" LEFT JOIN "movies" ON "genre"."id" = "movies"."genre_id" GROUP BY "genre"."id";'
+    const query = 'SELECT * FROM "movies";';
     pool.query(query).then((results) => {
         console.log(results);
         res.send(results.rows);
@@ -27,12 +27,10 @@ router.get('/', (req,res) => {
     });
 });
 
-
-
 router.delete('/:id', (req,res) => {
     console.log('Deleting in progress', );
     let deleteThis = req.params.id;
-    const query = 'DELETE FROM "genre" WHERE "id" = $1;';
+    const query = 'DELETE FROM "movies" WHERE "id" = $1;';
     pool.query(query, [deleteThis]).then((results) => {
         res.sendStatus(201);
     }).catch((error) => {
