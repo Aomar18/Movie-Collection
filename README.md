@@ -43,8 +43,8 @@ SELECT "genre".*,  COUNT("movies") FROM "genre" LEFT JOIN "movies" ON "genre"."i
 3. Open web browser and type in localhost:5000, press enter
 
 ## Screen Shot
-Inline-style: ![alt text]
-(https://github.com/lvang5/Movie-Collection/blob/master/Screen%20Shot%202018-08-27%20at%2012.53.22%20PM.png)
+![alt text](https://github.com/lvang5/Movie-Collection/blob/master/Screen%20Shot%202018-08-27%20at%2012.53.22%20PM.png)
+
 
 
 ## Completed features
