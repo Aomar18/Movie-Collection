@@ -30,6 +30,7 @@ myApp.controller('MovieController', function ($http) {
         self.name = '';
         self.image = '';
         self.runtime = '';
+        self.genre = '';
     }
 
 

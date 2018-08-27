@@ -15,13 +15,13 @@ body {
     background-size: cover;
 }
 
-
 md-content {
     width:100%;
     opacity: 0.2;
 }
-h1 {
+header {
     color: #333;
+   
 }
 
 strong {

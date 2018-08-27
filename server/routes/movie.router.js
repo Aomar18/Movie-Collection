@@ -17,7 +17,7 @@ router.post('/', (req,res) => {
 
 router.get('/', (req,res) => {
     console.log('in GET');
-    const query = 'SELECT * FROM "movies";';
+    const query = 'SELECT "movies"."id", "movies"."name", "movies"."genre_id", "movies"."release_date", "movies"."image_path", "genre"."genre" FROM "movies" JOIN "genre" ON "genre"."id" = "movies"."genre_id";';
     pool.query(query).then((results) => {
         console.log(results);
         res.send(results.rows);
@@ -30,6 +30,8 @@ router.get('/', (req,res) => {
 router.delete('/:id', (req,res) => {
     console.log('Deleting in progress', );
     let deleteThis = req.params.id;
+    console.log(deleteThis);
+    
     const query = 'DELETE FROM "movies" WHERE "id" = $1;';
     pool.query(query, [deleteThis]).then((results) => {
         res.sendStatus(201);

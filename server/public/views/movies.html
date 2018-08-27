@@ -22,15 +22,19 @@
         <div class="card-container" ng-repeat="item in vm.movieList" flex xs flex-gt-xs="25" layout="column" layout-align="space-between center">
             <md-card md-theme="default" md-theme-watch>
                 <md-card-title>
-                    <md-card-title-text>
+                    <md-card-title-text >
                         <span class="md-headline">{{item.name}}</span>
-                        <span class="md-subhead">{{item.release_date}}</span>
+                        <span class="md-subhead">{{item.release_date | date:'MM/dd/yyyy'}}</span>
+                        <span class="md-subhead" >{{item.genre}}</span>
+                        
                     </md-card-title-text>
-                    <md-card-title-media>
-                        <img ng-src="{{item.image_path}}" + "width=0px">
+                    <br>
+                    <md-card-title-media >
                         <div class="md-media-lg card-media"></div>
+                        <img ng-src="{{item.image_path}}">
                     </md-card-title-media>
                 </md-card-title>
+                
                 <md-card-actions layout="row" layout-align="end center">
                     <md-button ng-click="vm.deleteMovie(item.id)">Delete</md-button>
                 </md-card-actions>
