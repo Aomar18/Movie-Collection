@@ -47,7 +47,7 @@ SELECT "genre".*,  COUNT("movies") FROM "genre" LEFT JOIN "movies" ON "genre"."i
 
 
 ## Completed features
-<!-- - [x] Created three views home, rental, and sale
+- [x] Created views Add Movie and manage genre
 - [x] Created a controller and router for each view
 - [x] In client side added routes to access information in the server: 
     * create(POST)
@@ -58,15 +58,15 @@ SELECT "genre".*,  COUNT("movies") FROM "genre" LEFT JOIN "movies" ON "genre"."i
     * create(POST)
     * read(GET)
     * delete (DELETE)
-- [x] Added CSS styling to HTML -->
+- [x] Added CSS styling to HTML
+- [x] Added database 
 
 
 ### Next Steps
-<!-- Features that I would like to add to this project are:
-* Adding more CSS features
-* Add a favicon to this project
-* Add a contact information feature 
-* Contact information will have a text/call feature that notifies a person -->
+Features that I would like to add to this project are:
+* Adding more CSS features and Angular Material UI
+* Add an API
+* Better formatting to each view
 
 
 
