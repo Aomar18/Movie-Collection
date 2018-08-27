@@ -43,11 +43,11 @@ SELECT "genre".*,  COUNT("movies") FROM "genre" LEFT JOIN "movies" ON "genre"."i
 3. Open web browser and type in localhost:5000, press enter
 
 ## Screen Shot
-Inline-style: ![alt text](https://github.com/lvang5/real-estate/blob/master/Screen%20Shot%202018-08-20%20at%208.51.43%20AM.png)
+<!-- Inline-style: ![alt text] -->
 
 
 ## Completed features
-- [x] Created three views home, rental, and sale
+<!-- - [x] Created three views home, rental, and sale
 - [x] Created a controller and router for each view
 - [x] In client side added routes to access information in the server: 
     * create(POST)
@@ -58,15 +58,15 @@ Inline-style: ![alt text](https://github.com/lvang5/real-estate/blob/master/Scre
     * create(POST)
     * read(GET)
     * delete (DELETE)
-- [x] Added CSS styling to HTML
+- [x] Added CSS styling to HTML -->
 
 
 ### Next Steps
-Features that I would like to add to this project are:
+<!-- Features that I would like to add to this project are:
 * Adding more CSS features
 * Add a favicon to this project
 * Add a contact information feature 
-* Contact information will have a text/call feature that notifies a person
+* Contact information will have a text/call feature that notifies a person -->
 
 
 
