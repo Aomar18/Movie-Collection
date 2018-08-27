@@ -1,14 +1,14 @@
 <div>
 
-    <h1>Add a Category</h1>
-    <div>
+    <h1> <center> Add a Category </center></h1>
+    <div layout="row" layout-align="center center">
         <form ng-submit="vm.sendData(vm.genre)">
             <input type="text" class="genreInput" placeholder="Add a project" ng-model="vm.genre">
-            <button class="btn">Submit</button>
+            <button >Submit</button>
         </form>
     </div>
     <div>
-        <table>
+        <table class="container-table">
             <thead id="thead-container">
                 <tr>
                     <th>Project</th>
@@ -26,3 +26,7 @@
         </table>
     </div>
 </div>
+
+
+
+

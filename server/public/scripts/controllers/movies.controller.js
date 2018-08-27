@@ -67,7 +67,6 @@ myApp.controller('MovieController', function ($http) {
             url: '/movie/' + id
         }).then(function (response){
             getMovie();
-            alert('You have deleted this movie, no take backs');
         }).catch(function(error){
             alert('Can not delete yet there is something wrong. Check here:', error);
         });

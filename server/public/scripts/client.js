@@ -7,10 +7,7 @@ let myApp = angular.module('myApp', ['ngRoute', 'ngMaterial','ngMessages']);
 
 
 myApp.config( function ( $routeProvider){
-    $routeProvider.when( '/', {
-        templateUrl: '/views/home.html', //path of home
-    }) // end home
-    .when( '/movies', {
+    $routeProvider.when( '/movies', {
         templateUrl: '/views/movies.html',
         controller: 'MovieController as vm'
      }) //end movie
@@ -23,3 +20,9 @@ myApp.config( function ( $routeProvider){
      }) // end
 
 })
+
+myApp.config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .dark();
+                              // from default
+  });

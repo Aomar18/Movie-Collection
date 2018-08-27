@@ -17,23 +17,23 @@
     <script src="vendors/angular-messages.min.js"></script>
     <script src="vendors/angular-material.min.js"></script>
     
+    
     <script src="scripts/client.js"></script>
     <script src="scripts/controllers/genre.controller.js"></script>
     <script src="scripts/controllers/movies.controller.js"></script>
 
 </head>
-<header>
+<header layout="row" layout-align="center center">
     <h1>Best Movies</h1>
 </header>
-<body ng-app="myApp">
+<body ng-app="myApp" layout="column" layout-align="center center">
 <nav>
     <!-- try to create a login page -->
     <!-- create a nav bar -->
-    <a href="#!/">Home</a>
     <a href="#!/movies">Add Movies</a>
     <a href="#!/genre">Manage Genres</a>
 </nav>
-
+<br>
 <ng-view></ng-view>
 </body>
 
